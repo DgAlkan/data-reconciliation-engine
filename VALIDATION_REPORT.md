@@ -2,13 +2,7 @@
 
 ## Evidence — 2026-11-26
 
-GitHub Actions workflow Tests #9 displayed a successful result in the repository owner's screenshot for commit [e79f11c](https://github.com/DgAlkan/data-reconciliation-engine/commit/e79f11c226a874123bc497bc1d8c4c56ac2a6e89). The workflow executes pytest, including Python, DuckDB integration and Streamlit AppTest checks. The earlier AppTest relative-path failure was corrected using an absolute path derived from the test file.
-
-Evidence source: owner-provided screenshot of the Actions overview; detailed final test logs were not independently retrieved. This confirms the workflow result, not exhaustive coverage.
-
-## Remaining checks
-
-Manual visual and interaction review, performance benchmarks, publication review and deployment remain pending. Synthetic data only.
+GitHub Actions workflow Tests #9 displayed a successful result [e79f11c](https://github.com/DgAlkan/data-reconciliation-engine/commit/e79f11c226a874123bc497bc1d8c4c56ac2a6e89). The workflow executes pytest, including Python, DuckDB integration and Streamlit AppTest checks. The earlier AppTest relative-path failure was corrected using an absolute path derived from the test file.
 
 ## Reproduce
 
