@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import duckdb
 from openpyxl import load_workbook
@@ -24,7 +25,7 @@ def test_sql_and_excel(tmp_path):
     assert w["differences"].max_row==len(r["differences"])+1
 
 def test_app():
-    a=AppTest.from_file("app.py").run()
+    a=AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py")).run()
     assert not a.exception
     a.button[0].click().run()
     assert not a.exception
