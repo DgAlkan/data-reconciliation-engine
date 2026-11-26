@@ -1,8 +1,6 @@
-## v2.0 dashboard update
-
-[Live demo](https://dgalkan-data-quality.streamlit.app) 
-
 # Data Reconciliation Engine
+
+[Live demo](https://dgalkan-data-quality.streamlit.app)
 
 Independent portfolio project | Rodrigo Alcantara (DgAlkan).
 
@@ -39,15 +37,10 @@ Fixture expectations, not corporate performance claims. Key coverage is not cell
 - app.py: Streamlit interface
 - data/: synthetic fixtures
 - tests/: automated tests
-- sql/: DuckDB full outer join example (requires DuckDB separately)
+- sql/: DuckDB full outer join example
 - [Architecture and limitations](docs/architecture.md)
 
 ## Limitations
 
-Single unique key, in-memory CSV processing, inferred types, absolute numeric tolerance. No production-scale benchmark, authentication or hosted deployment. Use only synthetic or authorized non-sensitive data. Review outputs before sharing. No employer data, code or credentials are included.
-
-## Original repository introduction
-
-# data-reconciliation-engine
-A Python and SQL framework for automated data reconciliation, quality assessment and business rules validation.
+Single unique key, in-memory CSV processing, inferred types, absolute numeric tolerance. No production-scale benchmark or application-level authentication. Use only synthetic or authorized non-sensitive data. Review outputs before sharing. No employer data, code or credentials are included.
 
