@@ -17,7 +17,7 @@ def reconcile(source, target, key="id", tolerance=0.0, nonnegative=()):
     for c in columns:
         x, y = a.loc[common, c], b.loc[common, c]
         equal = (x.eq(y).fillna(False) | (x.isna() & y.isna()))
-        if pd.api.types.is_numeric_dtype(x) and pd.api.types.is_numeric_dtype(y):
+        if pd.api.types.is_numeric_dtype(x) and pd.api.types.is_numeric_dtype(y) and not pd.api.types.is_bool_dtype(x) and not pd.api.types.is_bool_dtype(y):
             equal = equal | ((x-y).abs() <= tolerance).fillna(False)
         for k in common[~equal]:
             differences.append({"key": k, "field": c, "source": x.loc[k], "target": y.loc[k]})
