@@ -4,8 +4,25 @@ import streamlit as st
 from engine import reconcile, export_excel
 
 st.set_page_config(page_title="Data Reconciliation Engine", layout="wide")
-st.caption("ANALYTICS INTELLIGENCE LAB / PORTFOLIO / V2.0")
-st.title("Data Reconciliation Engine")
+st.markdown("""<style>
+.stApp {background:#f1f5f9;}
+[data-testid="stSidebar"] {background:#142238;}
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] p,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"] p,
+[data-testid="stSidebar"] h2 {color:#e2e8f0;}
+[data-testid="stMetric"] {background:white;border:1px solid #dbe4ef;border-radius:14px;padding:16px;box-shadow:0 3px 12px #10223808;}
+[data-testid="stMetricValue"] {font-weight:700;color:#102238;}
+[data-testid="stMainBlockContainer"] {padding-top:2rem;max-width:1440px;}
+.stTabs [role="tablist"] {gap:12px;}
+.stTabs [role="tab"] {font-weight:600;}
+.lab-hero {background:linear-gradient(115deg,#0b1526,#193a60);color:white;padding:28px 30px;border-radius:16px;margin-bottom:18px;}
+.lab-hero h1 {color:white;font-size:clamp(1.65rem,3vw,2.5rem);margin:8px 0;padding:0;}
+.lab-hero p {color:#cbd5e1;margin:0;}
+.lab-kicker {color:#7dd3fc;font-size:12px;font-weight:700;letter-spacing:1.8px;}
+</style>
+<section class="lab-hero"><div class="lab-kicker">ANALYTICS INTELLIGENCE LAB / 01 / V2.1</div><h1>Data Reconciliation Engine</h1><p>Data quality · Reconciliation · Audit evidence</p></section>""", unsafe_allow_html=True)
+st.sidebar.header("Workspace")
+st.sidebar.caption("Configure your synthetic demonstration.")
 st.caption("Public demo: use synthetic data only. Never upload personal, confidential or employer data.")
 mode = st.sidebar.selectbox("Demo dataset", ["Classic (4 records)", "Migration audit (5,000 records)"])
 a = st.sidebar.file_uploader("Source CSV (synthetic only)", type="csv")
@@ -46,4 +63,5 @@ if st.button("Run reconciliation", type="primary"):
 
 
 st.divider()
-st.caption("Rodrigo Alcantara | Analytics Intelligence Lab | Synthetic demonstration")
+st.caption("Rodrigo Alcantara | Analytics Intelligence Lab | Independent synthetic demonstration")
+st.markdown("[Data Quality](https://dgalkan-data-quality.streamlit.app) · [Decision Intelligence](https://dgalkan-decision-intelligence.streamlit.app) · [Customer Journey](https://dgalkan-customer-journey.streamlit.app)")
