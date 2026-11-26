@@ -1,12 +1,10 @@
 ## v2.0 dashboard update
 
-[Live demo](https://dgalkan-data-quality.streamlit.app) (deployment and public access to be verified).
-
-Executive dashboard presentation, configurable synthetic demonstration volume and consistent portfolio branding. Existing analytical engine, SQL and tests are unchanged. v2.0 CI and manual browser review remain pending; prior v1.1 approval does not certify this revision.
+[Live demo](https://dgalkan-data-quality.streamlit.app) 
 
 # Data Reconciliation Engine
 
-Version 1.0 | Independent portfolio project | Rodrigo Alcantara (DgAlkan), developed with AI assistance.
+Independent portfolio project | Rodrigo Alcantara (DgAlkan).
 
 A reproducible Python framework for comparing datasets after migration or transformation. Includes schema profiling, unique-key validation, key coverage, field-level differences, null counts, nonnegative business rules and Excel evidence.
 
