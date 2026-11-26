@@ -20,9 +20,17 @@ st.markdown("""<style>
 .lab-hero p {color:#cbd5e1;margin:0;}
 .lab-kicker {color:#7dd3fc;font-size:12px;font-weight:700;letter-spacing:1.8px;}
 </style>
-<section class="lab-hero"><div class="lab-kicker">ANALYTICS INTELLIGENCE LAB / 01 / V2.1</div><h1>Data Reconciliation Engine</h1><p>Data quality · Reconciliation · Audit evidence</p></section>""", unsafe_allow_html=True)
+<section class="lab-hero"><div class="lab-kicker">ANALYTICS INTELLIGENCE LAB / 01 / V2.2</div><h1>Data Reconciliation Engine</h1><p>Data quality · Reconciliation · Audit evidence</p></section>""", unsafe_allow_html=True)
 st.sidebar.header("Workspace")
 st.sidebar.caption("Configure your synthetic demonstration.")
+st.sidebar.markdown("### Product suite")
+st.sidebar.markdown("[01 · Data Quality](https://dgalkan-data-quality.streamlit.app)  \n[02 · Decision Intelligence](https://dgalkan-decision-intelligence.streamlit.app)  \n[03 · Customer Journey](https://dgalkan-customer-journey.streamlit.app)")
+st.sidebar.divider()
+st.sidebar.markdown("### Analysis controls")
+with st.expander("About this product · methodology"):
+    st.markdown("Audit migration quality and investigate discrepancies.")
+    st.markdown("Unique-key alignment, null-aware field comparisons, numeric tolerance and configurable nonnegative rules. Key match rate measures coverage, not content accuracy.")
+    st.markdown("[Technical portfolio](https://github.com/DgAlkan) · Synthetic data only.")
 st.caption("Public demo: use synthetic data only. Never upload personal, confidential or employer data.")
 mode = st.sidebar.selectbox("Demo dataset", ["Classic (4 records)", "Migration audit (5,000 records)"])
 a = st.sidebar.file_uploader("Source CSV (synthetic only)", type="csv")
@@ -48,6 +56,7 @@ if st.button("Run reconciliation", type="primary"):
         m = result["summary"].iloc[0]
         for c, label, val in zip(st.columns(4), ["Source rows","Target rows","Key match rate","Different cells"], [f'{m.source_rows:,.0f}',f'{m.target_rows:,.0f}',"N/A" if pd.isna(m.key_match_rate) else f'{m.key_match_rate:.1%}',f'{m.different_cells:,.0f}']):
             c.metric(label,val)
+        st.caption(f"Matched {m.matched_keys:,} keys; investigate {m.different_cells:,} field differences and {m.source_only + m.target_only:,} exclusive records before migration approval.")
         st.bar_chart(pd.Series({"Matched":m.matched_keys,"Source only":m.source_only,"Target only":m.target_only},name="Records"))
         tabs = st.tabs(["Overview","Field differences","Exclusive records","Quality checks"])
         for tab, names in zip(tabs,[["summary","schema"],["differences"],["source_only","target_only"],["nulls","rules"]]):
