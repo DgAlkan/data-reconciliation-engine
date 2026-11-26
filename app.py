@@ -4,10 +4,11 @@ import streamlit as st
 from engine import reconcile, export_excel
 
 st.set_page_config(page_title="Data Reconciliation Engine", layout="wide")
+st.caption("ANALYTICS INTELLIGENCE LAB | Independent portfolio project")
 st.title("Data Reconciliation Engine")
-st.caption("Use synthetic or authorized non-sensitive data only.")
-a = st.file_uploader("Source CSV", type="csv")
-b = st.file_uploader("Target CSV", type="csv")
+st.caption("Public demo: use synthetic data only. Never upload personal, confidential or employer data.")
+a = st.file_uploader("Source CSV (synthetic only)", type="csv")
+b = st.file_uploader("Target CSV (synthetic only)", type="csv")
 key = st.text_input("Unique key", "id")
 tol = st.number_input("Absolute numeric tolerance", min_value=0.0, value=0.0)
 rules = st.text_input("Required nonnegative fields (comma separated)")
@@ -24,3 +25,7 @@ if st.button("Run reconciliation"):
         st.download_button("Download evidence", buffer.getvalue(), "evidence.xlsx")
     except (ValueError, TypeError, UnicodeError, OSError) as exc:
         st.error(str(exc))
+
+
+st.divider()
+st.caption("Rodrigo Alcantara | Analytics Intelligence Lab | Synthetic demonstration")
