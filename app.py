@@ -15,12 +15,12 @@ if st.button("Run reconciliation"):
     try:
         if bool(a) != bool(b):
             raise ValueError("Upload both files or neither")
-        result = reconcile(pd.read_csv(a or "data/source.csv"), pd.read_csv(b or "data/target.csv"), key, tol, [x.strip() for x in rules.split(",") if x.strip()])
+        result = reconcile(pd.read_csv(a or "data/source.csv", dtype={key: "string"}), pd.read_csv(b or "data/target.csv", dtype={key: "string"}), key, tol, [x.strip() for x in rules.split(",") if x.strip()])
         for name, frame in result.items():
             st.subheader(name.replace("_"," ").title())
             st.dataframe(frame)
         buffer = io.BytesIO()
         export_excel(result, buffer)
         st.download_button("Download evidence", buffer.getvalue(), "evidence.xlsx")
-    except (ValueError, TypeError) as exc:
+    except (ValueError, TypeError, UnicodeError, OSError) as exc:
         st.error(str(exc))
