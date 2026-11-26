@@ -4,6 +4,9 @@ import streamlit as st
 from engine import reconcile, export_excel
 
 st.set_page_config(page_title="Data Reconciliation Engine", layout="wide")
+lang = st.sidebar.radio("Idioma / Language", ["Português", "English"], horizontal=True, key="lab_language")
+def tr(en, pt):
+    return pt if lang == "Português" else en
 st.markdown("""<style>
 .stApp {background:#f1f5f9;}
 [data-testid="stSidebar"] {background:#142238;}
@@ -20,26 +23,26 @@ st.markdown("""<style>
 .lab-hero p {color:#cbd5e1;margin:0;}
 .lab-kicker {color:#7dd3fc;font-size:12px;font-weight:700;letter-spacing:1.8px;}
 </style>
-<section class="lab-hero"><div class="lab-kicker">ANALYTICS INTELLIGENCE LAB</div><h1>Data Reconciliation Engine</h1><p>Data quality · Reconciliation · Audit evidence</p></section>""", unsafe_allow_html=True)
-st.sidebar.header("Workspace")
-st.sidebar.caption("Configure your synthetic demonstration.")
-st.sidebar.markdown("### Product suite")
+<section class="lab-hero"><div class="lab-kicker">ANALYTICS INTELLIGENCE LAB</div><h1>Data Reconciliation Engine</h1><p>__LAB_SUBTITLE__</p></section>""".replace("__LAB_SUBTITLE__", tr("Data quality · Reconciliation · Audit evidence", "Qualidade de dados · Conciliação · Evidências de auditoria")), unsafe_allow_html=True)
+st.sidebar.header(tr("Workspace", "Área de trabalho"))
+st.sidebar.caption(tr("Configure your synthetic demonstration.", "Configure sua demonstração com dados sintéticos."))
+st.sidebar.markdown(tr("### Product suite", "### Produtos"))
 st.sidebar.markdown("[01 · Data Quality](https://dgalkan-data-quality.streamlit.app)  \n[02 · Decision Intelligence](https://dgalkan-decision-intelligence.streamlit.app)  \n[03 · Customer Journey](https://dgalkan-customer-journey.streamlit.app)")
 st.sidebar.divider()
-st.sidebar.markdown("### Analysis controls")
-with st.expander("About this product · methodology"):
-    st.markdown("Audit migration quality and investigate discrepancies.")
-    st.markdown("Unique-key alignment, null-aware field comparisons, numeric tolerance and configurable nonnegative rules. Key match rate measures coverage, not content accuracy.")
-    st.markdown("[Technical portfolio](https://github.com/DgAlkan) · Synthetic data only.")
-st.caption("Public demo: use synthetic data only. Never upload personal, confidential or employer data.")
-mode = st.sidebar.selectbox("Demo dataset", ["Classic (4 records)", "Migration audit (5,000 records)"])
-a = st.sidebar.file_uploader("Source CSV (synthetic only)", type="csv")
-b = st.sidebar.file_uploader("Target CSV (synthetic only)", type="csv")
-key = st.sidebar.text_input("Unique key", "id")
-tol = st.sidebar.number_input("Absolute numeric tolerance", min_value=0.0, value=0.0)
-rules = st.sidebar.text_input("Required nonnegative fields (comma separated)")
-st.info("Compare records, inspect discrepancies and export audit evidence.")
-if st.button("Run reconciliation", type="primary"):
+st.sidebar.markdown(tr("### Analysis controls", "### Filtros e parâmetros"))
+with st.expander(tr("About this product · methodology", "Sobre o produto · metodologia")):
+    st.markdown(tr("Audit migration quality and investigate discrepancies.", "Audite a qualidade da migração e investigue divergências."))
+    st.markdown(tr("Unique-key alignment, null-aware field comparisons, numeric tolerance and configurable nonnegative rules. Key match rate measures coverage, not content accuracy.", "Cruzamento por chave única, comparação de campos e nulos, tolerância numérica e regras de valores não negativos. A taxa de correspondência mede cobertura, não exatidão do conteúdo."))
+    st.markdown(tr("[Technical portfolio](https://github.com/DgAlkan) · Synthetic data only.", "[Portfólio técnico](https://github.com/DgAlkan) · Apenas dados sintéticos."))
+st.caption(tr("Public demo: use synthetic data only. Never upload personal, confidential or employer data.", "Demonstração pública: use apenas dados sintéticos. Nunca envie dados pessoais, confidenciais ou do empregador."))
+mode = st.sidebar.selectbox(tr("Demo dataset", "Base de demonstração"), ["Classic (4 records)", "Migration audit (5,000 records)"], format_func=lambda x: tr(x, {"Classic (4 records)":"Clássico (4 registros)", "Migration audit (5,000 records)":"Auditoria de migração (5.000 registros)"}[x]))
+a = st.sidebar.file_uploader(tr("Source CSV (synthetic only)", "CSV de origem (apenas sintético)"), type="csv")
+b = st.sidebar.file_uploader(tr("Target CSV (synthetic only)", "CSV de destino (apenas sintético)"), type="csv")
+key = st.sidebar.text_input(tr("Unique key", "Chave única"), "id")
+tol = st.sidebar.number_input(tr("Absolute numeric tolerance", "Tolerância numérica absoluta"), min_value=0.0, value=0.0)
+rules = st.sidebar.text_input(tr("Required nonnegative fields (comma separated)", "Campos não negativos obrigatórios (separados por vírgula)"))
+st.info(tr("Compare records, inspect discrepancies and export audit evidence.", "Compare registros, investigue divergências e exporte evidências."))
+if st.button(tr("Run reconciliation", "Executar conciliação"), type="primary"):
     try:
         if bool(a) != bool(b):
             raise ValueError("Upload both files or neither")
@@ -54,23 +57,23 @@ if st.button("Run reconciliation", type="primary"):
             target = pd.read_csv(b or "data/target.csv", dtype={key: "string"})
         result = reconcile(source, target, key, tol, [x.strip() for x in rules.split(",") if x.strip()])
         m = result["summary"].iloc[0]
-        for c, label, val in zip(st.columns(4), ["Source rows","Target rows","Key match rate","Different cells"], [f'{m.source_rows:,.0f}',f'{m.target_rows:,.0f}',"N/A" if pd.isna(m.key_match_rate) else f'{m.key_match_rate:.1%}',f'{m.different_cells:,.0f}']):
+        for c, label, val in zip(st.columns(4), [tr("Source rows", "Registros de origem"),tr("Target rows", "Registros de destino"),tr("Key match rate", "Taxa de correspondência"),tr("Different cells", "Divergências de conteúdo")], [f'{m.source_rows:,.0f}',f'{m.target_rows:,.0f}',"N/A" if pd.isna(m.key_match_rate) else f'{m.key_match_rate:.1%}',f'{m.different_cells:,.0f}']):
             c.metric(label,val)
-        st.caption(f"Matched {m.matched_keys:,} keys; investigate {m.different_cells:,} field differences and {m.source_only + m.target_only:,} exclusive records before migration approval.")
-        st.bar_chart(pd.Series({"Matched":m.matched_keys,"Source only":m.source_only,"Target only":m.target_only},name="Records"))
-        tabs = st.tabs(["Overview","Field differences","Exclusive records","Quality checks"])
+        st.caption(tr(f"Matched {m.matched_keys:,} keys; investigate {m.different_cells:,} field differences and {m.source_only + m.target_only:,} exclusive records before migration approval.", f"{m.matched_keys:,} chaves correspondentes; investigue {m.different_cells:,} divergências de conteúdo e {m.source_only + m.target_only:,} registros exclusivos antes de aprovar a migração."))
+        st.bar_chart(pd.Series({tr("Matched","Correspondentes"):m.matched_keys,tr("Source only","Só na origem"):m.source_only,tr("Target only","Só no destino"):m.target_only},name=tr("Records","Registros")))
+        tabs = st.tabs([tr("Overview", "Visão geral"),tr("Field differences", "Divergências por campo"),tr("Exclusive records", "Registros exclusivos"),tr("Quality checks", "Verificações de qualidade")])
         for tab, names in zip(tabs,[["summary","schema"],["differences"],["source_only","target_only"],["nulls","rules"]]):
             with tab:
                 for name in names:
-                    st.subheader(name.replace("_"," ").title())
+                    st.subheader(tr(name.replace("_"," ").title(), {"summary":"Resumo","schema":"Estrutura","differences":"Divergências","source_only":"Exclusivos da origem","target_only":"Exclusivos do destino","nulls":"Valores nulos","rules":"Regras"}[name]))
                     st.dataframe(result[name])
         buffer = io.BytesIO()
         export_excel(result, buffer)
-        st.download_button("Download evidence", buffer.getvalue(), "evidence.xlsx")
+        st.download_button(tr("Download evidence", "Baixar evidências"), buffer.getvalue(), "evidence.xlsx")
     except (ValueError, TypeError, UnicodeError, OSError) as exc:
         st.error(str(exc))
 
 
 st.divider()
-st.caption("Rodrigo Alcantara | Analytics Intelligence Lab | Independent synthetic demonstration")
+st.caption(tr("Rodrigo Alcantara | Analytics Intelligence Lab | Independent synthetic demonstration", "Rodrigo Alcantara | Analytics Intelligence Lab | Demonstração independente com dados sintéticos"))
 st.markdown("[Data Quality](https://dgalkan-data-quality.streamlit.app) · [Decision Intelligence](https://dgalkan-decision-intelligence.streamlit.app) · [Customer Journey](https://dgalkan-customer-journey.streamlit.app)")
